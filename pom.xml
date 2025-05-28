@@ -13,7 +13,7 @@
 		<maven.compiler.target>17</maven.compiler.target>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<java.version>17</java.version>
-		<keycloak.version>21.0.1</keycloak.version>
+		<keycloak.version>24.0.1</keycloak.version>
 	</properties>
 	<dependencies>
 		<!-- Keycloak dependencies -->
@@ -21,13 +21,11 @@
 			<groupId>org.keycloak</groupId>
 			<artifactId>keycloak-core</artifactId>
 			<version>${keycloak.version}</version>
-			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.keycloak</groupId>
 			<artifactId>keycloak-services</artifactId>
 			<version>${keycloak.version}</version>
-			<scope>provided</scope>
 			<exclusions>
 				<exclusion>
 					<groupId>org.jboss.resteasy</groupId>
@@ -39,14 +37,12 @@
 			<groupId>org.keycloak</groupId>
 			<artifactId>keycloak-model-legacy</artifactId>
 			<version>${keycloak.version}</version>
-			<scope>provided</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
 			<version>1.18.26</version>
-			<scope>provided</scope>
 		</dependency>
 
 		<dependency>
@@ -54,7 +50,52 @@
 			<artifactId>httpclient</artifactId>
 			<version>4.5.14</version>
 		</dependency>
+		<dependency>
+			<groupId>com.oracle.database.jdbc</groupId>
+			<artifactId>ojdbc11</artifactId>
+			<version>21.11.0.0</version> <!-- For Java 11+ -->
+		</dependency>
+
+		<dependency>
+			<groupId>org.keycloak</groupId>
+			<artifactId>keycloak-core</artifactId>
+			<version>${keycloak.version}</version> <!-- e.g., 22.0.5 -->
+			<scope>provided</scope>
+		</dependency>
+
+		<!-- Keycloak server SPI -->
+		<dependency>
+			<groupId>org.keycloak</groupId>
+			<artifactId>keycloak-server-spi</artifactId>
+			<version>${keycloak.version}</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<!-- OIDC SPI (contains GrantTypeProvider) -->
+		<dependency>
+			<groupId>org.keycloak</groupId>
+			<artifactId>keycloak-services</artifactId>
+			<version>${keycloak.version}</version>
+			<scope>provided</scope>
+		</dependency>
+
+	<!-- For Infinispan (default) implementation -->
+	<dependency>
+		<groupId>org.keycloak</groupId>
+		<artifactId>keycloak-model-infinispan</artifactId>
+		<version>${keycloak.version}</version>
+		<scope>provided</scope>
+	</dependency>
+
+	<!-- For JPA (database) implementation -->
+	<dependency>
+		<groupId>org.keycloak</groupId>
+		<artifactId>keycloak-model-jpa</artifactId>
+		<version>${keycloak.version}</version>
+		<scope>provided</scope>
+	</dependency>
 	</dependencies>
+
 
 	<build>
 		<finalName>${project.artifactId}.${project.name}-${project.version}</finalName>
