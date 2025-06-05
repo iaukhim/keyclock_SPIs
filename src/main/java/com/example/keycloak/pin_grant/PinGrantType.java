@@ -31,8 +31,6 @@ import org.keycloak.sessions.AuthenticationSessionModel;
 import org.keycloak.sessions.RootAuthenticationSessionModel;
 import org.keycloak.util.TokenUtil;
 
-import java.util.List;
-import java.util.Map;
 
 public class PinGrantType extends OAuth2GrantTypeBase {
 

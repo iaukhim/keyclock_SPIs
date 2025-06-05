@@ -1,1 +1,2 @@
 com.example.keycloak.pin_grant.PinAuthenticator
+com.example.keycloak.authenticator.CustomPasswordAuthenticatorFactory

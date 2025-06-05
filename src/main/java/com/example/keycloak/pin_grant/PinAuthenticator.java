@@ -13,7 +13,6 @@ import org.keycloak.models.RealmModel;
 import org.keycloak.models.UserModel;
 import org.keycloak.provider.ProviderConfigProperty;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -28,10 +27,13 @@ public class PinAuthenticator extends AbstractDirectGrantAuthenticator {
 
     @Override
     public void authenticate(AuthenticationFlowContext context) {
+        String headers = context.getHttpRequest().getHttpHeaders().getRequestHeaders().toString();
+        System.out.println("HttpRequest headers " + headers);
         Map<String, List<String>> attributes = context.getUser().getAttributes();
         Integer numberOfFailedAttempts = Integer.valueOf(attributes.get("failedAttempts").get(0));
         AuthenticatorConfigModel config = context.getAuthenticatorConfig();
         Integer maxAttempts = Integer.valueOf(config.getConfig().get(PIN_MAX_ATTEMPTS));
+        System.out.println("maxAttempts = " + maxAttempts);
 
         if (numberOfFailedAttempts >= maxAttempts) {
             context.getUser().setEnabled(false);
@@ -49,24 +51,6 @@ public class PinAuthenticator extends AbstractDirectGrantAuthenticator {
 
 
         String pin = retrievePin(context);
-/*        if (pin.endsWith("test")) {
-            MultivaluedMap<String, String> inputData = context.getHttpRequest().getDecodedFormParameters();
-            String sessionIdFromRequest = inputData.getFirst("authSessionId");
-            System.out.println("authSessionFromRequest = " + sessionIdFromRequest);
-            if (sessionIdFromRequest != null) {
-                RootAuthenticationSessionModel rootAuthenticationSession = context.getSession().authenticationSessions().getRootAuthenticationSession(context.getRealm(), sessionIdFromRequest);
-                if (rootAuthenticationSession != null) {
-                    System.out.println("rootAuthenticationSession " + rootAuthenticationSession);
-                }
-            }
-            String authSessionId = context.getAuthenticationSession().getParentSession().getId();
-            System.out.println("authSessionId = " + authSessionId);
-            context.getAuthenticationSession().setAuthNote("authSessionId", authSessionId);
-            context.getAuthenticationSession().setAuthNote("generatedOTP", "012345");
-            Response challengeResponse = errorResponse(Response.Status.UNAUTHORIZED.getStatusCode(), "invalid_grant", authSessionId);
-            context.forceChallenge(challengeResponse);
-            return;
-        }*/
         boolean valid = attributes.get("pin").get(0).equals(pin);
         if (!valid) {
             context.getUser().setSingleAttribute("failedAttempts", String.valueOf(numberOfFailedAttempts + 1));
@@ -76,7 +60,6 @@ public class PinAuthenticator extends AbstractDirectGrantAuthenticator {
             context.failure(AuthenticationFlowError.INVALID_USER, challengeResponse);
             return;
         }
-        //context.getAuthenticationSession().setAuthNote(AuthenticationManager.PASSWORD_VALIDATED, "true");
         context.success();
     }
 

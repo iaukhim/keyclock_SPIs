@@ -7,6 +7,9 @@ import org.keycloak.models.RealmModel;
 import org.keycloak.models.SubjectCredentialManager;
 import org.keycloak.storage.adapter.AbstractUserAdapter;
 
+import java.util.List;
+import java.util.Map;
+
 public class MyCustomUser extends AbstractUserAdapter {
 
     private final String username;
@@ -26,4 +29,20 @@ public class MyCustomUser extends AbstractUserAdapter {
     public SubjectCredentialManager credentialManager() {
         return new CustomCredentialManager();
     }
+
+    @Override
+    public Map<String, List<String>> getAttributes() {
+        System.out.println("At getAttributes method");
+        Map<String, List<String>> attributes = super.getAttributes();
+        attributes.put("external_id", List.of("someExternalId"));
+        attributes.put("username", List.of("externalUserUsername"));
+        return attributes;
+    }
+
+    @Override
+    public void removeRequiredAction(String action) {
+        System.out.println("at removeRequiredAction. Got action = " + action);
+    }
+
+
 }
